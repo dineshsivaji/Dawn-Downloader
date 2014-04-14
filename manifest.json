@@ -1,0 +1,25 @@
+{
+ "name": "Dinesh Downloader",
+    "description": "A small Downloader for Facebook videos",
+    "version": "0.1",
+    "permissions": [
+    "tabs","<all_urls>"
+    ],
+    
+    "content_scripts": [
+        {
+        "matches": [
+            "http://*.facebook.com/*",
+            "https://*.facebook.com/*"
+			],
+        "js": ["jquery-2.1.0.min.js", "facebook.js"],
+        "run_at": "document_end"         // pay attention to this line
+        }
+    ], 
+	"background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "manifest_version":2
+}
