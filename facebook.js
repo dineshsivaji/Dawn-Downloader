@@ -119,6 +119,7 @@ function startDownload(){
 	a.click();
 }
 
+/*
 function withWait(i,callback,callback_arg) {          
    setTimeout(function () { 
       console.log(new Date());
@@ -127,6 +128,7 @@ function withWait(i,callback,callback_arg) {
       if (--i) withWait(i,callback,callback_arg);      //  decrement i and call myLoop again if i > 0
    }, 1000)
 }
+*/
 
 
 function parseResponse(page,start,end){
@@ -157,7 +159,9 @@ chrome.runtime.onMessage.addListener(
     if (request.greeting == "UPDATE"){
 
       if((getPage().indexOf("fbPhotoSnowliftDropdownButton"))>0){
-      	withWait(1,addDownloadLinkToFB,"theatre");	
+      	// withWait(1,addDownloadLinkToFB,"theatre");
+      	setTimeout(addDownloadLinkToFB,1000,"theatre");	
+      	console.log("will check for download link in 1 sec");
       }
       
     }

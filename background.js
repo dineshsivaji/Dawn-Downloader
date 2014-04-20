@@ -8,6 +8,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 });
 
 
+/*
 chrome.runtime.onInstalled.addListener(function(details){
     if(details.reason == "install"){
         chrome.tabs.query({}, function(tabs) { 
@@ -20,6 +21,6 @@ chrome.runtime.onInstalled.addListener(function(details){
        });
     }
 });
-
+*/
 
 
