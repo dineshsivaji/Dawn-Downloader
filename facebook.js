@@ -31,15 +31,15 @@ function addDownloadLinkToFB(action){
 		quality.appendChild(document.createTextNode('Video Quality : ')); 
 	
 		var aTag = document.createElement('a');
-		// aTag.setAttribute('href',sd_link);
 		aTag.href = sd_link;
 		aTag.innerHTML = "Download";
 		aTag.onclick = function(){startDownload();return false;};
 			
+		var video_defn = null;	
 		if(!hd_link){
-			var array = ["Standard"];	
+			video_defn = ["Standard"];	
 		}else{
-			var array = ["Standard","High"];	
+			video_defn = ["Standard","High"];	
 		}
 
 		//Create and append select list
@@ -61,10 +61,10 @@ function addDownloadLinkToFB(action){
 		
 		
 		//Create and append the options
-		for (var i = 0; i < array.length; i++) {
+		for (var i = 0; i < video_defn.length; i++) {
 		    var option = document.createElement("option");
-		    option.setAttribute("value", array[i]);
-		    option.text = array[i];
+		    option.setAttribute("value", video_defn[i]);
+		    option.text = video_defn[i];
 		    selectList.appendChild(option);
 		}
 
@@ -73,7 +73,7 @@ function addDownloadLinkToFB(action){
 		//Video Quality : <combobox> <hyperLink>
 		
 		
-		$("#u_0_4").prepend('<div id="dawn_downloader">');
+		$("#fbPhotoPageFeedback").prepend('<div id="dawn_downloader">');
 		$("#dawn_downloader").append(quality);
 		$("#dawn_downloader").append(selectList);
 		//Adding the below item just to have a space between the combobox and the hyperlink. May be not a good idea. :(
@@ -119,26 +119,12 @@ function startDownload(){
 	a.click();
 }
 
-/*
-function withWait(i,callback,callback_arg) {          
-   setTimeout(function () { 
-      console.log(new Date());
-      //  your code here                
-      callback(callback_arg);
-      if (--i) withWait(i,callback,callback_arg);      //  decrement i and call myLoop again if i > 0
-   }, 1000)
-}
-*/
-
-
 function parseResponse(page,start,end){
 
 	var link = page.substring(page.indexOf(start),page.indexOf(end));
-	console.log("start to end -------------->"+link);
 	link = unescape(JSON.parse('"' + link + '"'));
-	console.log("After escaping URL : ");
-	console.log(link);
 	link = link.substring(link.indexOf("https"),link.lastIndexOf("\",\""));
+	link = link.replace(/\\/g,"");
 	return link;
 }
 
@@ -159,7 +145,6 @@ chrome.runtime.onMessage.addListener(
     if (request.greeting == "UPDATE"){
 
       if((getPage().indexOf("fbPhotoSnowliftDropdownButton"))>0){
-      	// withWait(1,addDownloadLinkToFB,"theatre");
       	setTimeout(addDownloadLinkToFB,1000,"theatre");	
       	console.log("will check for download link in 1 sec");
       }
