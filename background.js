@@ -1,10 +1,10 @@
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-   if(changeInfo.status=="complete") { 
+   //if(changeInfo.status=="complete") { 
        var url = tab.url;
        if(url == "https://www.facebook.com/" || url == "http://www.facebook.com/"){return;}
        chrome.tabs.sendMessage(tab.id,{greeting: "UPDATE"});
-   }
+   //}
 });
 
 

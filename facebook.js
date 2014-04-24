@@ -1,9 +1,13 @@
 
-var LOG_LEVEL = 0;
+var LOG_LEVEL = 1;
 
 function addDownloadLinkToFB(action){
 
-	
+	if(document.getElementById("dawn_downloader")!=null){
+		log("Already download link is appended to the page. Returning to the base now ...");
+		return;
+	}
+
 	var page = getPage(); 
 	log("action : "+action);
 
@@ -11,6 +15,8 @@ function addDownloadLinkToFB(action){
 		log("sd_src itself is not there for action : "+action);
 		return;
 	}
+
+	
 
 	log("--------------------------------");
 	log("FB Video download link");
@@ -26,79 +32,71 @@ function addDownloadLinkToFB(action){
 		log("SD and HD link not available");return;
 	}
 
+
+
+	var quality = document.createElement('b');
+	quality.appendChild(document.createTextNode('Video Quality : ')); 
+
+	var aTag = document.createElement('a');
+	aTag.href = sd_link;
+	aTag.innerHTML = "Download";
+	aTag.onclick = function(){startDownload();return false;};
+		
+	var video_defn = null;	
+	if(!hd_link){
+		video_defn = ["Standard"];	
+	}else{
+		video_defn = ["Standard","High"];	
+	}
+
+	//Create and append select list
+	var selectList = document.createElement("select");
+	selectList.setAttribute("id", "mySelect");
+
+	//Adding the onchange event only when HD link is available
+	if(hd_link){
+		selectList.addEventListener(
+	     'change',
+	     function() {
+	     	log("changing the link");
+	     	var downloadLink = this.selectedIndex ? hd_link : sd_link;
+	     	aTag.setAttribute('href',downloadLink);
+	     },
+	     false
+		);	
+	}
+	
+	
+	//Create and append the options
+	for (var i = 0; i < video_defn.length; i++) {
+	    var option = document.createElement("option");
+	    option.setAttribute("value", video_defn[i]);
+	    option.text = video_defn[i];
+	    selectList.appendChild(option);
+	}
+
+
+	//Video Quality : <combobox> <hyperLink>
+
+	var dawn_fb_entry_element = null;
 	//Video is opened in a classical page
 	if(action=="classical"){
 		log("Trying to add download link in FB classical page");
-
-		var quality = document.createElement('b');
-		quality.appendChild(document.createTextNode('Video Quality : ')); 
-	
-		var aTag = document.createElement('a');
-		aTag.href = sd_link;
-		aTag.innerHTML = "Download";
-		aTag.onclick = function(){startDownload();return false;};
-			
-		var video_defn = null;	
-		if(!hd_link){
-			video_defn = ["Standard"];	
-		}else{
-			video_defn = ["Standard","High"];	
-		}
-
-		//Create and append select list
-		var selectList = document.createElement("select");
-		selectList.setAttribute("id", "mySelect");
-
-		//Adding the onchange event only when HD link is available
-		if(hd_link){
-			selectList.addEventListener(
-		     'change',
-		     function() {
-		     	log("changing the link");
-		     	var downloadLink = this.selectedIndex ? hd_link : sd_link;
-		     	aTag.setAttribute('href',downloadLink);
-		     },
-		     false
-			);	
-		}
-		
-		
-		//Create and append the options
-		for (var i = 0; i < video_defn.length; i++) {
-		    var option = document.createElement("option");
-		    option.setAttribute("value", video_defn[i]);
-		    option.text = video_defn[i];
-		    selectList.appendChild(option);
-		}
-
-		
-
-		//Video Quality : <combobox> <hyperLink>
-		
-		
-		$("#fbPhotoPageFeedback").prepend('<div id="dawn_downloader">');
-		$("#dawn_downloader").append(quality);
-		$("#dawn_downloader").append(selectList);
-		//Adding the below item just to have a space between the combobox and the hyperlink. May be not a good idea. :(
-		$("#dawn_downloader").append(" ");
-		$("#dawn_downloader").append(aTag);
-
-
-		log("anchor tag is appended in page");
-	}else{
-
-		
-		log("Trying to add download link in FB Theatre effect page");
-
-		// var quality = document.createTextNode('  ');
-		var aTag = document.createElement('a');
-		// aTag.setAttribute('href','');
-		// aTag.setAttribute('onclick','');
-		aTag.onclick = function() {test();};
-		aTag.innerHTML = "Download";
-		// $('#fbPhotoSnowliftActions div').append('<a class="fbPhotoSnowliftDropdownButton _p uiButton" href="#" role="button" aria-haspopup="true" aria-expanded="true" rel="toggle" id="u_jsonp_5_k" aria-owns="u_k_0"><span class="uiButtonText">Download</span></a>');
-		$('#fbPhotoSnowliftActions div').append(aTag); 
+		dawn_fb_entry_element = "#fbPhotoPageFeedback";
 	}
+	//Video is opened in the theatre effect page
+	else{
+		log("Trying to add download link in FB Theatre effect page")
+		dawn_fb_entry_element = "#fbPhotoSnowliftActions";
+	}
+
+	$(dawn_fb_entry_element).prepend('<div id="dawn_downloader">');
+	$("#dawn_downloader").append(quality);
+	$("#dawn_downloader").append(selectList);
+	//Adding the below item just to have a space between the combobox and the hyperlink. May be not a good idea. :(
+	$("#dawn_downloader").append(" ");
+	$("#dawn_downloader").append(aTag);
+
 
 }
 
