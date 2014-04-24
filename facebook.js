@@ -1,31 +1,34 @@
+
+var LOG_LEVEL = 0;
+
 function addDownloadLinkToFB(action){
 
 	
 	var page = getPage(); 
-	console.log("action : "+action);
+	log("action : "+action);
 
 	if(page.indexOf("sd_src")<0){
-		console.log("sd_src itself is not there for action : "+action);
+		log("sd_src itself is not there for action : "+action);
 		return;
 	}
 
-	console.log("--------------------------------");
-	console.log("FB Video download link");
+	log("--------------------------------");
+	log("FB Video download link");
 	var sd_link = parseResponse(page,"sd_src","thumbnail_src");
-	console.log("SD Link : " + sd_link);
+	log("SD Link : " + sd_link);
 	var hd_link = parseResponse(page,"hd_src","is_hds");
-	console.log("HD Link : " + hd_link);
-	console.log("--------------------------------");
+	log("HD Link : " + hd_link);
+	log("--------------------------------");
 
 	
 	
 	if((sd_link.indexOf("http")<0) && (hd_link.indexOf("http"))){
-		console.log("SD and HD link not available");return;
+		log("SD and HD link not available");return;
 	}
 
 	//Video is opened in a classical page
 	if(action=="classical"){
-		console.log("Trying to add download link in FB classical page");
+		log("Trying to add download link in FB classical page");
 
 		var quality = document.createElement('b');
 		quality.appendChild(document.createTextNode('Video Quality : ')); 
@@ -51,7 +54,7 @@ function addDownloadLinkToFB(action){
 			selectList.addEventListener(
 		     'change',
 		     function() {
-		     	console.log("changing the link");
+		     	log("changing the link");
 		     	var downloadLink = this.selectedIndex ? hd_link : sd_link;
 		     	aTag.setAttribute('href',downloadLink);
 		     },
@@ -81,11 +84,11 @@ function addDownloadLinkToFB(action){
 		$("#dawn_downloader").append(aTag);
 
 
-		console.log("anchor tag is appended in page");
+		log("anchor tag is appended in page");
 	}else{
 
 		
-		console.log("Trying to add download link in FB Theatre effect page");
+		log("Trying to add download link in FB Theatre effect page");
 
 		// var quality = document.createTextNode('  ');
 		var aTag = document.createElement('a');
@@ -133,6 +136,7 @@ function getPage(){
 	return document.body.outerHTML;
 }
 
+function log(info){if(LOG_LEVEL){console.log(info)};}
 
 addDownloadLinkToFB("classical");
 
@@ -140,13 +144,13 @@ addDownloadLinkToFB("classical");
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     
-    console.log("Received message from background page");
+    log("Received message from background page");
 
     if (request.greeting == "UPDATE"){
 
       if((getPage().indexOf("fbPhotoSnowliftDropdownButton"))>0){
       	setTimeout(addDownloadLinkToFB,1000,"theatre");	
-      	console.log("will check for download link in 1 sec");
+      	log("will check for download link in 1 sec");
       }
       
     }
