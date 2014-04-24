@@ -3,6 +3,7 @@ var LOG_LEVEL = 1;
 
 function addDownloadLinkToFB(action){
 
+	//Checking if dawn_downloader element already present in the page
 	if(document.getElementById("dawn_downloader")!=null){
 		log("Already download link is appended to the page. Returning to the base now ...");
 		return;
@@ -27,12 +28,13 @@ function addDownloadLinkToFB(action){
 	log("--------------------------------");
 
 	
-	
+	//If by chance, SD and HD link missed...
 	if((sd_link.indexOf("http")<0) && (hd_link.indexOf("http"))){
 		log("SD and HD link not available");return;
 	}
 
-
+	//Format of the Dawn_Downloader as below
+	//Video Quality : <combobox> <hyperLink>
 
 	var quality = document.createElement('b');
 	quality.appendChild(document.createTextNode('Video Quality : ')); 
@@ -42,7 +44,8 @@ function addDownloadLinkToFB(action){
 	aTag.innerHTML = "Download";
 	aTag.onclick = function(){startDownload();return false;};
 		
-	var video_defn = null;	
+	var video_defn = null;
+	//If HD link is not available, then appending only 'Standard' definition alone 	
 	if(!hd_link){
 		video_defn = ["Standard"];	
 	}else{
@@ -66,7 +69,6 @@ function addDownloadLinkToFB(action){
 		);	
 	}
 	
-	
 	//Create and append the options
 	for (var i = 0; i < video_defn.length; i++) {
 	    var option = document.createElement("option");
@@ -75,9 +77,7 @@ function addDownloadLinkToFB(action){
 	    selectList.appendChild(option);
 	}
 
-
-	//Video Quality : <combobox> <hyperLink>
-
+	//The variable which will be point to the HTML element onto which append will happen
 	var dawn_fb_entry_element = null;
 	//Video is opened in a classical page
 	if(action=="classical"){
@@ -96,8 +96,7 @@ function addDownloadLinkToFB(action){
 	//Adding the below item just to have a space between the combobox and the hyperlink. May be not a good idea. :(
 	$("#dawn_downloader").append(" ");
 	$("#dawn_downloader").append(aTag);
-
-
+	log("Download link is appended successfully. :)");
 }
 
 function getFileName(){
@@ -146,12 +145,12 @@ chrome.runtime.onMessage.addListener(
 
     if (request.greeting == "UPDATE"){
 
-      if((getPage().indexOf("fbPhotoSnowliftDropdownButton"))>0){
-      	setTimeout(addDownloadLinkToFB,1000,"theatre");	
-      	log("will check for download link in 1 sec");
-      }
+      	if((getPage().indexOf("fbPhotoSnowliftDropdownButton"))>0){
+      		setTimeout(addDownloadLinkToFB,1000,"theatre");	
+      		log("will check for download link in 1 sec");
+      	}
       
     }
-  });
+});
 
 
