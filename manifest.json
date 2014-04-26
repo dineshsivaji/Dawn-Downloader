@@ -13,7 +13,7 @@
             "https://*.facebook.com/*"
 			],
         "js": ["jquery-2.1.0.min.js", "facebook.js"],
-        "run_at": "document_end"         // pay attention to this line
+        "run_at": "document_end"
         }
     ], 
 	"background": {
@@ -21,5 +21,12 @@
             "background.js"
         ]
     },
+    "icons": {
+      "16": "icons/icon_16px_dd.png",
+      "32": "icons/icon_32px_dd.png",
+      "48": "icons/icon_48px_dd.png",
+      "64": "icons/icon_64px_dd.png",
+     "128": "icons/icon_128px_dd.png"
+   },
     "manifest_version":2
 }
