@@ -5,7 +5,7 @@
     "permissions": [
     "tabs","<all_urls>"
     ],
-    
+    "short_name": "Dawn Downloader",
     "content_scripts": [
         {
         "matches": [
